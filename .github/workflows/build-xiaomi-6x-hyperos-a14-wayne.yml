@@ -15,7 +15,7 @@ env:
   KERNEL_SOURCE : "https://github.com/LKDenchin/scarlet_sdm660.git"
   KERNEL_BRANCH : "7.2"
 
-  CLANG_SOURCE : "https://github.com/llvm/llvm-project/releases/download/llvmorg-20.1.8/LLVM-20.1.8-Linux-X64.tar.xz"
+  CLANG_SOURCE : "https://github.com/llvm/llvm-project/releases/download/llvmorg-18.1.8/clang+llvm-18.1.8-aarch64-linux-gnu.tar.xz"
   CLANG_BRANCH : ""
 
   GCC_GNU : true
