@@ -13,7 +13,7 @@ env:
   EXTRA_CMDS : "LD=ld.lld LLVM=1 LLVM_IAS=1"
 
   KERNEL_SOURCE : "https://github.com/LKDenchin/scarlet_sdm660.git"
-  KERNEL_BRANCH : "7.2"
+  KERNEL_BRANCH : "sched-test"
 
   CLANG_SOURCE : "https://github.com/llvm/llvm-project/releases/download/llvmorg-21.1.5/LLVM-21.1.5-Linux-X64.tar.xz"
   CLANG_BRANCH : ""
