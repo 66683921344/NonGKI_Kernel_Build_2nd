@@ -10,7 +10,7 @@ env:
   DEVICE_CODENAME : "wayne"
 
   CUSTOM_CMDS : "CLANG_TRIPLE=aarch64-linux-gnu-"
-  EXTRA_CMDS : "NM=llvm-nm OBJDUMP=llvm-objdump STRIP=llvm-strip"
+  EXTRA_CMDS : "NM=llvm-nm OBJDUMP=llvm-objdump STRIP=llvm-strip LD=ld.lld LLVM=1 LLVM_IAS=1"
 
   KERNEL_SOURCE : "https://github.com/LKDenchin/scarlet_sdm660.git"
   KERNEL_BRANCH : "7.2"
