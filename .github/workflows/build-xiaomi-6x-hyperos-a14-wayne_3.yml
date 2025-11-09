@@ -10,7 +10,7 @@ env:
   DEVICE_CODENAME : "wayne"
 
   CUSTOM_CMDS : "CLANG_TRIPLE=aarch64-linux-gnu-"
-  EXTRA_CMDS : "LLVM=1 LLVM_IAS=1"
+  EXTRA_CMDS : "LD=ld.lld LLVM=1 LLVM_IAS=1"
 
   KERNEL_SOURCE : "https://github.com/CY945/scarlet_sdm660_test.git"
   KERNEL_BRANCH : "7.2_test_fix"
@@ -25,9 +25,9 @@ env:
   GCC_32_BRANCH : ""
 
   DEFCONFIG_SOURCE: ""
-  DEFCONFIG_NAME : "vendor/wayne-oss-perf_defconfig"
-  DEFCONFIG_ORIGIN_IMAGE: ""
-  DEFCONFIG_FROM_BOOT: false
+  DEFCONFIG_NAME : ""
+  DEFCONFIG_ORIGIN_IMAGE: "https://raw.githubusercontent.com/CY945/NonGKI_Kernel_Build_2nd/refs/heads/CY945-patch-3/used_flies/4.19.325-LKGeek-perf.img"
+  DEFCONFIG_FROM_BOOT: true
 
   KERNELSU_SOURCE : "https://raw.githubusercontent.com/tiann/KernelSU/refs/heads/main/kernel/setup.sh"
   KERNELSU_BRANCH : "v0.9.5"
