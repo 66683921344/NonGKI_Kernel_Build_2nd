@@ -12,7 +12,7 @@ env:
   CUSTOM_CMDS : "CLANG_TRIPLE=aarch64-linux-gnu-"
   EXTRA_CMDS : "LD=ld.lld"
 
-  KERNEL_SOURCE : "https://github.com/LKDenchin/scarlet_sdm660.git"
+  KERNEL_SOURCE : "https://github.com/CY945/scarlet_sdm660_test.git"
   KERNEL_BRANCH : "sched-test"
 
   CLANG_SOURCE : "https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/master/clang-r547379.tar.gz"
