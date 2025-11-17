@@ -27,10 +27,10 @@ echo "Current syscall patch version:$PATCH_LEVEL"
 
 for i in "${patch_files[@]}"; do
 
-    if grep -q "ksu" "$i"; then
+    if grep -q "ksu_handle" "$i"; then
         echo "[-] Warning: $i contains KernelSU"
         echo "[+] Code in here:"
-        grep -n "ksu" "$i"
+        grep -n "ksu_handle" "$i"
         echo "[-] End of file."
         continue
     fi
@@ -60,7 +60,6 @@ for i in "${patch_files[@]}"; do
             echo "[-] fs/exec.c patch failed for unknown reasons, please provide feedback in time."
         fi
         ;;
-
     ## open.c
     fs/open.c)
         if [ "$FIRST_VERSION" -lt 5 ] && [ "$SECOND_VERSION" -lt 19 ]; then
@@ -77,7 +76,6 @@ for i in "${patch_files[@]}"; do
             echo "[-] fs/open.c patch failed for unknown reasons, please provide feedback in time."
         fi
         ;;
-
     ## read_write.c
     fs/read_write.c)
         if [ "$FIRST_VERSION" -lt 5 ] && [ "$SECOND_VERSION" -lt 19 ]; then
@@ -94,7 +92,6 @@ for i in "${patch_files[@]}"; do
             echo "[-] fs/read_write.c patch failed for unknown reasons, please provide feedback in time."
         fi
         ;;
-
     ## stat.c
     fs/stat.c)
         sed -i '/^#if !defined(__ARCH_WANT_STAT64) || defined(__ARCH_WANT_SYS_NEWFSTATAT)/i\#ifdef CONFIG_KSU\n__attribute__((hot))\nextern int ksu_handle_stat(int *dfd, const char __user **filename_user,\n\t\t\t\tint *flags);\n#endif\n' fs/stat.c
@@ -106,17 +103,13 @@ for i in "${patch_files[@]}"; do
             echo "[-] fs/stat.c patch failed for unknown reasons, please provide feedback in time."
         fi
         ;;
-
     ## namei.c
     fs/namei.c)
-        if [ "$FIRST_VERSION" -lt 4 ] && [ "$SECOND_VERSION" -lt 5 ]; then
-            sed -i '/err = lookup_slow(nd, name, path);/c \ \t\tif (strstr(current->comm, "throne_tracker") == NULL)\n\t\t\terr = lookup_slow(nd, name, path);\n\t\telse\n\t\t\terr = -ENOENT;\n' fs/namei.c
-
-            if grep -q "throne_tracker" "fs/namei.c"; then
-                echo "[+] fs/namei.c Patched!"
-            else
-                echo "[-] fs/namei.c patch failed for unknown reasons, please provide feedback in time."
-            fi
+        if grep "throne_tracker" "fs/namei.c"; then
+            echo "[-] Warning: fs/namei.c contains KernelSU"
+            echo "[+] Code in here:"
+            grep -n "throne_tracker" "fs/namei.c"
+            echo "[-] End of file."
         elif [ "$FIRST_VERSION" -lt 4 ] && [ "$SECOND_VERSION" -lt 19 ]; then
             sed -i '/if (unlikely(err)) {/a \#ifdef CONFIG_KSU\n\t\tif (unlikely(strstr(current->comm, "throne_tracker"))) {\n\t\t\terr = -ENOENT;\n\t\t\tgoto out_err;\n\t\t}\n#endif' fs/namei.c
 
@@ -162,11 +155,10 @@ for i in "${patch_files[@]}"; do
     ## security.c
     security/security.c)
         if [ "$FIRST_VERSION" -lt 4 ] && [ "$SECOND_VERSION" -lt 19 ]; then
-            sed -i '/int security_binder_set_context_mgr(struct task_struct/i \#ifdef CONFIG_KSU\n\extern int ksu_bprm_check(struct linux_binprm *bprm);\n\extern int ksu_handle_rename(struct dentry *old_dentry, struct dentry *new_dentry);\n\extern int ksu_handle_setuid(struct cred *new, const struct cred *old);\n\extern int ksu_key_permission(key_ref_t key_ref, const struct cred *cred,\n\t\t\t\tunsigned perm);\n\#endif' security/security.c
+            sed -i '/int security_binder_set_context_mgr(struct task_struct/i \#ifdef CONFIG_KSU\n\extern int ksu_bprm_check(struct linux_binprm *bprm);\n\extern int ksu_handle_rename(struct dentry *old_dentry, struct dentry *new_dentry);\n\extern int ksu_handle_setuid(struct cred *new, const struct cred *old);\n\#endif' security/security.c
             sed -i '/ret = security_ops->bprm_check_security(bprm);/i \#ifdef CONFIG_KSU\n\tksu_bprm_check(bprm);\n\#endif' security/security.c
             sed -i '/if (unlikely(IS_PRIVATE(old_dentry->d_inode) ||/i \#ifdef CONFIG_KSU\n\tksu_handle_rename(old_dentry, new_dentry);\n\#endif' security/security.c
             sed -i '/return security_ops->task_fix_setuid(new, old, flags);/i \#ifdef CONFIG_KSU\n\tksu_handle_setuid(new, old);\n\#endif' security/security.c
-            sed -i '/return security_ops->key_permission(key_ref, cred, perm);/i \#ifdef CONFIG_KSU\n\tksu_key_permission(key_ref, cred, perm);\n\#endif' security/security.c
 
             if grep -q "ksu_handle_setuid" "security/security.c"; then
                 echo "[+] security/security.c Patched!"
@@ -175,7 +167,6 @@ for i in "${patch_files[@]}"; do
             fi
         fi
         ;;
-
     ## selinux/hooks.c
     security/selinux/hooks.c)
         if [ "$FIRST_VERSION" -lt 4 ] && [ "$SECOND_VERSION" -lt 18 ]; then
@@ -234,6 +225,7 @@ for i in "${patch_files[@]}"; do
             echo "[-] KernelSU have no sys_reboot, Skipped."
         fi
         ;;
+    ## kernel/sys.c
     kernel/sys.c)
         if [ -f "drivers/kernelsu/setuid_hook.c" ] && grep -q "ksu_handle_setresuid " "drivers/kernelsu/setuid_hook.c"; then
             if grep -q "__sys_setresuid" "kernel/sys.c"; then
@@ -244,6 +236,12 @@ for i in "${patch_files[@]}"; do
             else
                 sed -i '/^SYSCALL_DEFINE3(setresuid, uid_t, ruid, uid_t, euid, uid_t, suid)/i\#ifdef CONFIG_KSU\nextern int ksu_handle_setresuid(uid_t ruid, uid_t euid, uid_t suid);\n#endif\n' kernel/sys.c
                 ed -i '0,/\tif ((ruid != (uid_t) -1) && !uid_valid(kruid))/b; /\tif ((ruid != (uid_t) -1) && !uid_valid(kruid))/i\#ifdef CONFIG_KSU_SUSFS\n\tif (ksu_handle_setresuid(ruid, euid, suid)) {\n\t\tpr_info("Something wrong with ksu_handle_setresuid()\\");\n\t}\n#endif' kernel/sys.c
+            fi
+
+            if grep -q "ksu_handle_setresuid" "kernel/sys.c"; then
+                echo "[+] kernel/sys.c Patched!"
+            else
+                echo "[-] kernel/sys.c patch failed for unknown reasons, please provide feedback in time."
             fi
         else
             echo "[-] KernelSU have no setresuid, Skipped."
