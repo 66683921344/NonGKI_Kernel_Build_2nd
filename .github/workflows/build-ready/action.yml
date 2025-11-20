@@ -259,39 +259,7 @@ runs:
         run: |
           cd $GITHUB_WORKSPACE/device_kernel
 
-          if [[ "${{ env.KERNELSU_AUTO_FORK }}" == "sukisu" ]] && [[ "${{ env.KERNELSU_AUTO_FORK }}" == "true" ]] && [ "${{ env.FIRST_VERSION }}" -lt 5 ] && [ "${{ env.SECOND_VERSION }}" -lt 10 ]; then
-            echo "======================================================================================================="
-            echo "=                                                                                                     ="
-            echo "= SukiSU-Ultra has a large number of problems with the kernel < 4.14 that cause compilation failures  ="
-            echo "=         ,and the project will refuse to compile it by default until everything is resolved.         ="
-            echo "=                                                                                                     ="
-            echo "=        If you recognize these but still need to compile, enable the BUILD_DEBUGGER function.        ="
-            echo "=                                                                                                     ="
-            echo "======================================================================================================="
-            if [[ "${{ env.BUILD_DEBUGGER }}" == "true" ]]; then
-                echo ">>>>>>>>>>>>>Warning<<<<<<<<<<<<<"
-                echo "Detected BUILD_DEBUGGER enabled !"
-                echo ">>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<"
-            else
-                false
-            fi
-          elif [[ "${{ env.KERNELSU_SOURCE }}" == *SukiSU* ]] && [ "${{ env.FIRST_VERSION }}" -lt 5 ] && [ "${{ env.SECOND_VERSION }}" -lt 10 ]; then
-            echo "======================================================================================================="
-            echo "=                                                                                                     ="
-            echo "= SukiSU-Ultra has a large number of problems with the kernel < 4.14 that cause compilation failures  ="
-            echo "=         ,and the project will refuse to compile it by default until everything is resolved.         ="
-            echo "=                                                                                                     ="
-            echo "=        If you recognize these but still need to compile, enable the BUILD_DEBUGGER function.        ="
-            echo "=                                                                                                     ="
-            echo "======================================================================================================="
-            if [[ "${{ env.BUILD_DEBUGGER }}" == "true" ]]; then
-                echo ">>>>>>>>>>>>>Warning<<<<<<<<<<<<<"
-                echo "Detected BUILD_DEBUGGER enabled !"
-                echo ">>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<"
-            else
-                false
-            fi
-          fi
+          # Nothing.
 
       - name: KPM Function Support
         if: env.KPM_ENABLE == 'true'
@@ -335,7 +303,11 @@ runs:
 
           # Fork
           if [[ "${{ env.KERNELSU_SOURCE }}" == *rsuntk* ]] || [[ "${{ env.KERNELSU_SOURCE }}" == *SukiSU* ]] || [[ "${{ env.KERNELSU_AUTO_FORK }}" == "sukisu" ]] || [[ "${{ env.KERNELSU_AUTO_FORK }}" == "rsuntk" ]]; then
-            echo "CONFIG_KSU_MANUAL_HOOK=y" >> ./arch/${{ env.KERNEL_ARCH }}/configs/${{ env.DEFCONFIG_NAME }}
+            if [[ ${{ env.SUSFS_ENABLE }} == "true" ]] && [[ ${{ env.SUSFS_UPDATE }} == "true" ]]; then
+                echo "CONFIG_KSU_MANUAL_HOOK=n" >> ./arch/${{ env.KERNEL_ARCH }}/configs/${{ env.DEFCONFIG_NAME }}
+            else
+                echo "CONFIG_KSU_MANUAL_HOOK=y" >> ./arch/${{ env.KERNEL_ARCH }}/configs/${{ env.DEFCONFIG_NAME }}
+            fi
           fi
 
           if [[ "${{ env.KERNELSU_SOURCE }}" == *next* ]] || [[ "${{ env.KERNELSU_SOURCE }}" == *wild* ]] || [[ "${{ env.KERNELSU_AUTO_FORK }}" == "wild" ]] || [[ "${{ env.KERNELSU_AUTO_FORK }}" == "next" ]]; then
@@ -388,6 +360,7 @@ runs:
             fi
 
             if [[ "${{ env.KPM_ENABLE }}" == "true" ]]; then
+                echo "CONFIG_DEBUG_KERNEL=n" >> ./arch/${{ env.KERNEL_ARCH }}/configs/${{ env.DEFCONFIG_NAME }}
                 echo "CONFIG_KALLSYMS=y" >> ./arch/${{ env.KERNEL_ARCH }}/configs/${{ env.DEFCONFIG_NAME }}
                 echo "CONFIG_KALLSYMS_ALL=y" >> ./arch/${{ env.KERNEL_ARCH }}/configs/${{ env.DEFCONFIG_NAME }}
             fi
