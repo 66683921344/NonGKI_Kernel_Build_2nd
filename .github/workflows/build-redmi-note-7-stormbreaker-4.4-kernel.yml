@@ -10,19 +10,19 @@ env:
   DEVICE_CODENAME : "lavender"
 
   CUSTOM_CMDS : "CLANG_TRIPLE=aarch64-linux-gnu-"
-  EXTRA_CMDS : "LD=ld.lld"
+  EXTRA_CMDS : "LLVM=1 LLVM_IAS=1"
 
   KERNEL_SOURCE : "https://github.com/stormbreaker-project/kernel_xiaomi_lavender.git"
   KERNEL_BRANCH : "oldcam-hmp"
 
-  CLANG_SOURCE : "https://github.com/kdrag0n/proton-clang.git"
-  CLANG_BRANCH : "master"
+  CLANG_SOURCE : "https://github.com/LineageOS/android_prebuilts_clang_kernel_linux-x86_clang-r416183b.git"
+  CLANG_BRANCH : "lineage-20.0"
 
   GCC_GNU : false
-  GCC_64_SOURCE : ""
-  GCC_64_BRANCH : ""
-  GCC_32_SOURCE : ""
-  GCC_32_BRANCH : ""
+  GCC_64_SOURCE : "https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9.git"
+  GCC_64_BRANCH : "android12L-release"
+  GCC_32_SOURCE : "https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.9.git"
+  GCC_32_BRANCH : "android12L-release"
 
   DEFCONFIG_SOURCE: ""
   DEFCONFIG_NAME : "lavender-perf_defconfig"
