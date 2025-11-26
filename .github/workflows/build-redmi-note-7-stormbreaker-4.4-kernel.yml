@@ -10,7 +10,7 @@ env:
   DEVICE_CODENAME : "lavender"
 
   CUSTOM_CMDS : "CLANG_TRIPLE=aarch64-linux-gnu-"
-  EXTRA_CMDS : "LLVM=1 LLVM_IAS=1"
+  EXTRA_CMDS : "LLVM=1 LLVM_IAS=1 LD=ld.lld"
 
   KERNEL_SOURCE : "https://github.com/stormbreaker-project/kernel_xiaomi_lavender.git"
   KERNEL_BRANCH : "oldcam-hmp"
