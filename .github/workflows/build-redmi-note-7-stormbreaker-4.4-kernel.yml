@@ -10,13 +10,13 @@ env:
   DEVICE_CODENAME : "lavender"
 
   CUSTOM_CMDS : "CLANG_TRIPLE=aarch64-linux-gnu-"
-  EXTRA_CMDS : ""
+  EXTRA_CMDS : "LLVM=1 LLVM_IAS=1"
 
   KERNEL_SOURCE : "https://github.com/stormbreaker-project/kernel_xiaomi_lavender.git"
   KERNEL_BRANCH : "oldcam-hmp"
 
-  CLANG_SOURCE : "https://github.com/AOSP-11/prebuilts_clang_host_linux-x86_clang-r416183c.git"
-  CLANG_BRANCH : "11"
+  CLANG_SOURCE : "https://github.com/llvm/llvm-project/releases/download/llvmorg-19.1.7/LLVM-19.1.7-Linux-X64.tar.xz"
+  CLANG_BRANCH : ""
 
   GCC_GNU : false
   GCC_64_SOURCE : "https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9.git"
