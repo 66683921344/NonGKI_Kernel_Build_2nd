@@ -13,7 +13,7 @@ env:
   EXTRA_CMDS : "LD=ld.lld"
 
   KERNEL_SOURCE : "https://github.com/ImSpiDy/kernel_xiaomi_lavender.git"
-  KERNEL_BRANCH : "14-retro"
+  KERNEL_BRANCH : "14-Retro"
 
   CLANG_SOURCE : "https://github.com/llvm/llvm-project/releases/download/llvmorg-19.1.7/LLVM-19.1.7-Linux-X64.tar.xz"
   CLANG_BRANCH : ""
