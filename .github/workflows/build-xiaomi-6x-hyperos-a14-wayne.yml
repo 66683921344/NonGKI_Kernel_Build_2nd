@@ -15,7 +15,7 @@ env:
   KERNEL_SOURCE : "https://github.com/CY945/scarlet_sdm660_test.git"
   KERNEL_BRANCH : "sched_test_1"
 
-  CLANG_SOURCE : "https://github.com/llvm/llvm-project/releases/download/llvmorg-19.1.7/LLVM-19.1.7-Linux-X64.tar.xz"
+  CLANG_SOURCE : "https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/master/clang-r547379.tar.gz"
   CLANG_BRANCH : ""
 
   GCC_GNU : false
