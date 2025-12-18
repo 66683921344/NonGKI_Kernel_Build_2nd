@@ -12,8 +12,8 @@ env:
   CUSTOM_CMDS : "CLANG_TRIPLE=aarch64-linux-gnu-"
   EXTRA_CMDS : "LD=ld.lld"
 
-  KERNEL_SOURCE : "https://github.com/LKDenchin/scarlet_sdm660.git"
-  KERNEL_BRANCH : "sched-test"
+  KERNEL_SOURCE : "https://github.com/CY945/scarlet_sdm660_test.git"
+  KERNEL_BRANCH : "sched_test_1"
 
   CLANG_SOURCE : "https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/master/clang-r547379.tar.gz"
   CLANG_BRANCH : ""
@@ -33,7 +33,7 @@ env:
   KERNELSU_BRANCH : "nongki"
 
   KERNELSU_AUTO_GET : "true" # if u want easy setting kernelsu, u can true.
-  KERNELSU_AUTO_FORK : "rsuntk" # magic, rsuntk, next, wild, jingmatrix and sukisu
+  KERNELSU_AUTO_FORK : "next" # magic, rsuntk, next, wild, jingmatrix and sukisu
 
   SUSFS_ENABLE : false
   SUSFS_FIXED : false
