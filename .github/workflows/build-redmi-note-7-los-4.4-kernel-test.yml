@@ -19,9 +19,9 @@ env:
   CLANG_BRANCH : "lineage-20.0"
 
   GCC_GNU : false
-  GCC_64_SOURCE : "https://github.com/KJ-Network/gcc-linaro-7.5.0-2019.12-x86_64_arm-linux-gnueabi.git"
+  GCC_64_SOURCE : "https://github.com/KJ-Network/gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gnu.git"
   GCC_64_BRANCH : "gcc-linaro-7.5.0"
-  GCC_32_SOURCE : "https://github.com/KJ-Network/gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gnu.git"
+  GCC_32_SOURCE : "https://github.com/KJ-Network/gcc-linaro-7.5.0-2019.12-x86_64_arm-linux-gnueabi.git"
   GCC_32_BRANCH : "gcc-linaro-7.5.0"
 
   DEFCONFIG_SOURCE: ""
