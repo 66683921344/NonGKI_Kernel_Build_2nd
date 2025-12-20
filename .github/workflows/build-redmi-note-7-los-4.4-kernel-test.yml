@@ -10,7 +10,7 @@ env:
   DEVICE_CODENAME : "lavender"
 
   CUSTOM_CMDS : "CLANG_TRIPLE=aarch64-linux-gnu-"
-  EXTRA_CMDS : "LLVM=1 LLVM_IAS=1"
+  EXTRA_CMDS : "LLVM=1"
 
   KERNEL_SOURCE : "https://github.com/jsdizkcksv/android_kernel_xiaomi_sdm660.git"
   KERNEL_BRANCH : "main"
@@ -33,7 +33,7 @@ env:
   KERNELSU_BRANCH : "v0.9.5"
 
   KERNELSU_AUTO_GET : "true" # if u want easy setting kernelsu, u can true.
-  KERNELSU_AUTO_FORK : "rsuntk" # magic, rsuntk, next, wild, jingmatrix and sukisu
+  KERNELSU_AUTO_FORK : "magic" # magic, rsuntk, next, wild, jingmatrix and sukisu
 
   SUSFS_ENABLE : false
   SUSFS_FIXED : false
