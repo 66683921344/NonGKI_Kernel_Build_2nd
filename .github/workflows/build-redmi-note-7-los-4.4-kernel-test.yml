@@ -10,7 +10,7 @@ env:
   DEVICE_CODENAME : "lavender"
 
   CUSTOM_CMDS : "CLANG_TRIPLE=aarch64-linux-gnu-"
-  EXTRA_CMDS : "LLVM=1"
+  EXTRA_CMDS : ""
 
   KERNEL_SOURCE : "https://github.com/jsdizkcksv/android_kernel_xiaomi_sdm660.git"
   KERNEL_BRANCH : "main"
