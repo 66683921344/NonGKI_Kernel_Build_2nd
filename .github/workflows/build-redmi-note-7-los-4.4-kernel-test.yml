@@ -10,7 +10,7 @@ env:
   DEVICE_CODENAME : "lavender"
 
   CUSTOM_CMDS : "CLANG_TRIPLE=aarch64-linux-gnu-"
-  EXTRA_CMDS : ""
+  EXTRA_CMDS : "LD=ld.lld"
 
   KERNEL_SOURCE : "https://github.com/jsdizkcksv/android_kernel_xiaomi_sdm660.git"
   KERNEL_BRANCH : "main"
@@ -19,10 +19,10 @@ env:
   CLANG_BRANCH : "lineage-20.0"
 
   GCC_GNU : false
-  GCC_64_SOURCE : "https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9.git"
-  GCC_64_BRANCH : "android12L-release"
-  GCC_32_SOURCE : "https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.9.git"
-  GCC_32_BRANCH : "android12L-release"
+  GCC_64_SOURCE : "https://github.com/KJ-Network/gcc-linaro-7.5.0-2019.12-x86_64_arm-linux-gnueabi.git"
+  GCC_64_BRANCH : "gcc-linaro-7.5.0"
+  GCC_32_SOURCE : "https://github.com/KJ-Network/gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gnu.git"
+  GCC_32_BRANCH : "gcc-linaro-7.5.0"
 
   DEFCONFIG_SOURCE: ""
   DEFCONFIG_NAME : "lavender_defconfig"
