@@ -25,7 +25,7 @@ env:
   GCC_32_BRANCH : "android12L-release"
 
   DEFCONFIG_SOURCE: ""
-  DEFCONFIG_NAME : ""
+  DEFCONFIG_NAME : "msm8937_32go_i25d"
   DEFCONFIG_ORIGIN_IMAGE: "https://github.com/CY945/NonGKI_Kernel_Build_2nd/raw/refs/heads/CY945-patch-3/used_flies/sdm429w_boot-1.img"
   DEFCONFIG_FROM_BOOT: true
 
