@@ -10,10 +10,10 @@ env:
   DEVICE_CODENAME : "instantnoodle"
 
   CUSTOM_CMDS : "CLANG_TRIPLE=aarch64-linux-gnu-"
-  EXTRA_CMDS : "NM=llvm-nm OBJDUMP=llvm-objdump STRIP=llvm-strip"
+  EXTRA_CMDS : "BRAND_SHOW_FLAG=oneplus NM=llvm-nm OBJDUMP=llvm-objdump STRIP=llvm-strip"
 
-  KERNEL_SOURCE : "https://github.com/toraidl/android_kernel_oneplus_sm8250_los.git"
-  KERNEL_BRANCH : "bpf-5.10-backport"
+  KERNEL_SOURCE : "https://github.com/JackA1ltman/android_kernel_oneplus_sm8250_los_noksu.git"
+  KERNEL_BRANCH : "staging"
 
   CLANG_SOURCE : "https://github.com/ZyCromerZ/Clang/releases/download/10.0.1-20220724-release/Clang-10.0.1-20220724.tar.gz"
   CLANG_BRANCH : ""
@@ -65,7 +65,7 @@ env:
 
   REKERNEL_ENABLE: "false" # if u need Re:Kernel.
 
-  HOOK_METHOD: "syscall" # manual hook method,can choice : normal, syscall and tracepoint.
+  HOOK_METHOD: "syscall" # Manual hook method ->  syscall and tracepoint.
   HOOK_OLDER: "false" # contain backport older patch and syscall older patch.
 
   KPM_ENABLE: "true" # Only use it for SukiSU-Ultra.
@@ -119,6 +119,9 @@ jobs:
           cd $GITHUB_WORKSPACE/device_kernel
 
           echo "CONFIG_TECHPACK_CAMERA_ONEPLUS=y" >> ./arch/arm64/configs/${{ env.DEFCONFIG_NAME }}
+
+          cd KernelSU
+          git checkout a7b37149678ef852c246b7f044a9ec4b14911fbb
 
       - name: 🧰 Patch Kernel of Re:Kernel
         uses: ./.github/workflows/patch-rekernel

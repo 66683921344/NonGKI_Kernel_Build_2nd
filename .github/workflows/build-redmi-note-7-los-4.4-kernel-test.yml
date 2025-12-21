@@ -1,4 +1,4 @@
-name: Build Smartisan U3 Pro (Mokee A7)
+name: Build Redmi Note 7 (los 4.4 kernel)
 
 on:
   workflow_call:
@@ -6,33 +6,33 @@ on:
 
 env:
   # Device env
-  DEVICE_NAME : "smartisan_u3_pro"
-  DEVICE_CODENAME : "osborn"
+  DEVICE_NAME : "redmi note 7"
+  DEVICE_CODENAME : "lavender"
 
   CUSTOM_CMDS : "CLANG_TRIPLE=aarch64-linux-gnu-"
-  EXTRA_CMDS : "LD=ld.lld LLVM=1 LLVM_IAS=1"
+  EXTRA_CMDS : "LD=ld.lld"
 
-  KERNEL_SOURCE : "https://github.com/MoKee/android_kernel_smartisan_sdm660.git"
-  KERNEL_BRANCH : "mkn-mr1"
+  KERNEL_SOURCE : "https://github.com/jsdizkcksv/android_kernel_xiaomi_sdm660.git"
+  KERNEL_BRANCH : "main"
 
-  CLANG_SOURCE : ""
-  CLANG_BRANCH : ""
+  CLANG_SOURCE : "https://github.com/LineageOS/android_prebuilts_clang_kernel_linux-x86_clang-r416183b.git"
+  CLANG_BRANCH : "lineage-20.0"
 
   GCC_GNU : false
-  GCC_64_SOURCE : "https://releases.linaro.org/components/toolchain/binaries/4.9-2017.01/aarch64-linux-gnu/gcc-linaro-4.9.4-2017.01-x86_64_aarch64-linux-gnu.tar.xz"
-  GCC_64_BRANCH : ""
-  GCC_32_SOURCE : "https://releases.linaro.org/components/toolchain/binaries/4.9-2017.01/arm-linux-gnueabihf/gcc-linaro-4.9.4-2017.01-x86_64_arm-linux-gnueabihf.tar.xz"
-  GCC_32_BRANCH : ""
+  GCC_64_SOURCE : "https://github.com/KJ-Network/gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gnu.git"
+  GCC_64_BRANCH : "gcc-linaro-7.5.0"
+  GCC_32_SOURCE : "https://github.com/KJ-Network/gcc-linaro-7.5.0-2019.12-x86_64_arm-linux-gnueabi.git"
+  GCC_32_BRANCH : "gcc-linaro-7.5.0"
 
   DEFCONFIG_SOURCE: ""
-  DEFCONFIG_NAME : "mokee_osborn_defconfig"
+  DEFCONFIG_NAME : "lavender_defconfig"
   DEFCONFIG_ORIGIN_IMAGE: ""
   DEFCONFIG_FROM_BOOT: false
 
   KERNELSU_SOURCE : "https://raw.githubusercontent.com/tiann/KernelSU/refs/heads/main/kernel/setup.sh"
   KERNELSU_BRANCH : "v0.9.5"
 
-  KERNELSU_AUTO_GET : "false" # if u want easy setting kernelsu, u can true.
+  KERNELSU_AUTO_GET : "true" # if u want easy setting kernelsu, u can true.
   KERNELSU_AUTO_FORK : "magic" # magic, rsuntk, next, wild, jingmatrix and sukisu
 
   SUSFS_ENABLE : false
@@ -47,17 +47,17 @@ env:
   NEED_DTBO : false
   NEED_SAFE_DTBO : false
 
-  ROM_TEXT : "mokee_a7"
+  ROM_TEXT : "lavender_los_4.4_kernel_test"
 
   # Other env
-  PYTHON_VERSION: "2" # Only 2(Ubuntu 22.04 and Ubuntu 20.04) or 3(Any OS Versions).
+  PYTHON_VERSION: "3" # Only 2(Ubuntu 22.04 and Ubuntu 20.04) or 3(Any OS Versions).
 
   PACK_METHOD: "Anykernel3" # Anykernel3 need SOURCE and BRANCH, MKBOOTIMG needn't it.
 
   KERNELSU_METHOD: "shell" # shell, manual and only.
 
-  PATCHES_SOURCE: "author/source" # [your_name]/[your_patch] -> gooder123/NonGKI_Patcher
-  PATCHES_BRANCH: "branch" # [your_branch] -> main
+  PATCHES_SOURCE: "" # [your_name]/[your_patch] -> gooder123/NonGKI_Patcher
+  PATCHES_BRANCH: "" # [your_branch] -> main
 
   SUSFS_FOLDER_FIXED: "" # Fill in your patch prefix directory here. Leave it blank if there isn't one. -> your_folder
   SUSFS_155_FIXED: "" # Fill in your patches here. If there are multiple patches, please separate them with a comma. Leave it blank if there isn't one. -> patch1,patch2 (Only v1.5.5 SuSFS)
@@ -65,7 +65,7 @@ env:
 
   REKERNEL_ENABLE: "false" # if u need Re:Kernel.
 
-  HOOK_METHOD: "normal" # manual hook method,can choice : normal, syscall and tracepoint.
+  HOOK_METHOD: "syscall" # manual hook method,can choice : normal, syscall and tracepoint.
   HOOK_OLDER: "false" # contain backport older patch and syscall older patch.
 
   KPM_ENABLE: "false" # Only use it for SukiSU-Ultra.
@@ -79,17 +79,17 @@ env:
   GENERATE_DTB: "false" # if u kernel need DTB , but cannot auto generate it. (Only Anykernel3).
   GENERATE_CHIP: "qcom" # only supported for qcom and mediatek.
 
-  BUILD_DEBUGGER: "false" # Output build errors.
-  SKIP_PATCH: "false" # Ignore errors found in Patch Debugger.
+  BUILD_DEBUGGER: "true" # Output build errors.
+  SKIP_PATCH: "true" # Ignore errors found in Patch Debugger.
 
   BUILD_OTHER_CONFIG: "false" # Merge config files.
-  MERGE_CONFIG_FILES: "vendor/debugfs.config,vendor/lahaina_QGKI.config"
+  MERGE_CONFIG_FILES: ""
 
   FREE_MORE_SPACE: "false" # if u want get more space, enabled it.
 
 jobs:
   build-kernel:
-    name: Smartisan U3 Pro (Mokee A7)
+    name: Build Kernel
     runs-on: ubuntu-latest # u can changed to ubuntu 22.04, and need container set ubuntu-latest
     # container: archlinux/archlinux:latest # if u need use arch linux -> archlinux/archlinux:latest or ubuntu 20.04 -> ubuntu:focal
     env:
@@ -117,8 +117,7 @@ jobs:
         run: |
           # Only ${{ env.DEVICE_NAME }} use it.
           cd $GITHUB_WORKSPACE/device_kernel
-
-          sed -i 's/YYLTYPE yylloc/extern YYLTYPE yylloc/g' scripts/dtc/dtc-lexer.lex.c_shipped
+          # Nothing
 
       - name: 🧰 Patch Kernel of Re:Kernel
         uses: ./.github/workflows/patch-rekernel
