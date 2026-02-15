@@ -48,11 +48,11 @@ for i in "${patch_files[@]}"; do
 
         sed -i '/#include <linux\/vmalloc.h>/a\#ifdef CONFIG_KSU_SUSFS\n#include <linux/susfs_def.h>\n#endif' fs/exec.c
         if grep -q "__do_execve_file" "fs/exec.c"; then
-            sed -i '/static int __do_execve_file(int fd, struct filename \*filename,/i #ifdef CONFIG_KSU_SUSFS\nextern bool ksu_execveat_hook __read_mostly;\nextern bool ksu_su_compat_enabled __read_mostly;\nextern bool susfs_is_boot_completed_triggered __read_mostly;\nextern bool __ksu_is_allow_uid_for_current(uid_t uid);\nextern int ksu_handle_execveat(int *fd, struct filename **filename_ptr, void *argv,\n\t\t\tvoid *envp, int *flags);\nextern int ksu_handle_execveat_sucompat(int *fd, struct filename **filename_ptr, void *argv,\n\t\t\t\tvoid *envp, int *flags);\n#endif' fs/exec.c
+            sed -i '/static int __do_execve_file(int fd, struct filename \*filename,/i #ifdef CONFIG_KSU_SUSFS\nextern bool ksu_execveat_hook __read_mostly;\nextern bool ksu_su_compat_enabled __read_mostly;\nextern bool susfs_is_sdcard_android_data_decrypted __read_mostly;\nextern bool __ksu_is_allow_uid_for_current(uid_t uid);\nextern int ksu_handle_execveat(int *fd, struct filename **filename_ptr, void *argv,\n\t\t\tvoid *envp, int *flags);\nextern int ksu_handle_execveat_sucompat(int *fd, struct filename **filename_ptr, void *argv,\n\t\t\t\tvoid *envp, int *flags);\n#endif' fs/exec.c
         else
-            sed -i '/^static int do_execveat_common(int fd, struct filename \*filename,/i\#ifdef CONFIG_KSU_SUSFS\nextern bool ksu_execveat_hook __read_mostly;\nextern bool ksu_su_compat_enabled __read_mostly;\nextern bool susfs_is_boot_completed_triggered __read_mostly;\nextern bool __ksu_is_allow_uid_for_current(uid_t uid);\nextern int ksu_handle_execveat(int *fd, struct filename **filename_ptr, void *argv,\n\t\t\tvoid *envp, int *flags);\nextern int ksu_handle_execveat_sucompat(int *fd, struct filename **filename_ptr,\n\t\t\t\t void *argv, void *envp, int *flags);\n#endif\n' fs/exec.c
+            sed -i '/^static int do_execveat_common(int fd, struct filename \*filename,/i\#ifdef CONFIG_KSU_SUSFS\nextern bool ksu_execveat_hook __read_mostly;\nextern bool ksu_su_compat_enabled __read_mostly;\nextern bool susfs_is_sdcard_android_data_decrypted __read_mostly;\nextern bool __ksu_is_allow_uid_for_current(uid_t uid);\nextern int ksu_handle_execveat(int *fd, struct filename **filename_ptr, void *argv,\n\t\t\tvoid *envp, int *flags);\nextern int ksu_handle_execveat_sucompat(int *fd, struct filename **filename_ptr,\n\t\t\t\t void *argv, void *envp, int *flags);\n#endif\n' fs/exec.c
         fi
-        sed -i '/return PTR_ERR(filename);/a\#ifdef CONFIG_KSU_SUSFS\n\tif (likely(susfs_is_current_proc_umounted()) || !ksu_su_compat_enabled) {\n\t\tgoto orig_flow;\n\t}\n\tif (unlikely(ksu_execveat_hook || !susfs_is_boot_completed_triggered)) {\n\t\tksu_handle_execveat(\&fd, \&filename, \&argv, \&envp, \&flags);\n\t} else if ((__ksu_is_allow_uid_for_current(current_uid().val))) {\n\t\tksu_handle_execveat_sucompat(\&fd, \&filename, \&argv, \&envp, \&flags);\n\t}\norig_flow:\n#endif' fs/exec.c
+        sed -i '/return PTR_ERR(filename);/a\#ifdef CONFIG_KSU_SUSFS\n\tif (likely(susfs_is_current_proc_umounted()) || !ksu_su_compat_enabled) {\n\t\tgoto orig_flow;\n\t}\n\tif (unlikely(ksu_execveat_hook || !susfs_is_sdcard_android_data_decrypted)) {\n\t\tksu_handle_execveat(\&fd, \&filename, \&argv, \&envp, \&flags);\n\t} else if ((__ksu_is_allow_uid_for_current(current_uid().val))) {\n\t\tksu_handle_execveat_sucompat(\&fd, \&filename, \&argv, \&envp, \&flags);\n\t}\norig_flow:\n#endif' fs/exec.c
 
         if grep -q "ksu_handle_execveat_sucompat" "fs/exec.c"; then
             echo "[+] fs/exec.c Patched!"
@@ -120,9 +120,21 @@ for i in "${patch_files[@]}"; do
             sed -i '/#include <asm\/uaccess.h>/i #ifdef CONFIG_KSU_SUSFS\n#include <linux\/susfs_def.h>\n#endif' fs/stat.c
         fi
 
-        if grep -q "ksu_init_rc_hook" "drivers/kernelsu/ksud.c"; then
+        if grep -q "ksu_handle_vfs_fstat" "drivers/kernelsu/ksud.c"; then
+            if grep -q "vfs_statx_fd" "fs/stat.c"; then
+                sed -i '/int vfs_statx_fd(unsigned int fd, struct kstat \*stat,/i\#ifdef CONFIG_KSU_SUSFS\nextern bool ksu_init_rc_hook __read_mostly;\nextern void ksu_handle_vfs_fstat(int fd, loff_t *kstat_size_ptr);\n#endif \/\/ #ifdef CONFIG_KSU_SUSFS' fs/stat.c
+                sed -i '/\t\tfdput(f);/i\#ifdef CONFIG_KSU_SUSFS\n\t\tif (unlikely(ksu_init_rc_hook)) {\n\t\t\tksu_handle_vfs_fstat(fd, \&stat->size);\n\t\t}\n#endif \/\/ #ifdef CONFIG_KSU_SUSFS' fs/stat.c
+
+            else
+                sed -i '/int vfs_fstat(unsigned int fd, struct kstat \*stat)/i\#ifdef CONFIG_KSU_SUSFS\nextern bool ksu_init_rc_hook __read_mostly;\nextern void ksu_handle_vfs_fstat(int fd, loff_t *kstat_size_ptr);\n#endif \/\/ #ifdef CONFIG_KSU_SUSFS' fs/stat.c
+                sed -i '/\t\tfdput(f);/i\#ifdef CONFIG_KSU_SUSFS\n\t\tif (unlikely(ksu_init_rc_hook)) {\n\t\t\tksu_handle_vfs_fstat(fd, \&stat->size);\n\t\t}\n#endif \/\/ #ifdef CONFIG_KSU_SUSFS' fs/stat.c
+
+            fi
+
+        elif grep -q "ksu_init_rc_hook" "drivers/kernelsu/ksud.c"; then
             sed -i '/#if !defined(__ARCH_WANT_STAT64) || defined(__ARCH_WANT_SYS_NEWFSTATAT)/i\#ifdef CONFIG_KSU_SUSFS\nextern bool ksu_init_rc_hook __read_mostly;\nextern void ksu_handle_sys_newfstatat(int fd, loff_t *kstat_size_ptr);\n#endif\n' fs/stat.c
             awk '/return cp_new_stat\(&stat, statbuf\);/{line=$0; lnum=NR} {lines[NR]=$0} END {for(i=1;i<=NR;i++) if(i==lnum) {print "#ifdef CONFIG_KSU_SUSFS"; print "\tif (unlikely(ksu_init_rc_hook)) {"; print "\t\tksu_handle_sys_newfstatat(dfd, &stat.size);"; print "\t}"; print "#endif"; print lines[i]} else print lines[i]}' fs/stat.c > fs/stat.c.tmp && mv fs/stat.c.tmp fs/stat.c
+
         else
             if grep -q "vfs_statx" "fs/stat.c"; then
                 echo "[+] Checked vfs_statx existed in Kernel!"
@@ -135,10 +147,15 @@ for i in "${patch_files[@]}"; do
             fi
         fi
 
+        if grep -q "ksu_handle_newfstat_ret" "drivers/kernelsu/syscall_table_hook.c" >/dev/null 2>&1; then
+            sed -i '/SYSCALL_DEFINE2(newfstat, unsigned int, fd, struct stat __user \*, statbuf)/i\#ifdef CONFIG_KSU\nextern void ksu_handle_newfstat_ret(unsigned int *fd, struct stat __user **statbuf_ptr);\n#if defined(__ARCH_WANT_STAT64) || defined(__ARCH_WANT_COMPAT_STAT64)\nextern void ksu_handle_fstat64_ret(unsigned int *fd, struct stat64 __user **statbuf_ptr); \/\/ optional\n#endif\n#endif\n' fs/stat.c
+            sed -i '/error = cp_new_stat(\&stat, statbuf);/a\#ifdef CONFIG_KSU\n\tksu_handle_newfstat_ret(\&fd, \&statbuf);\n#endif\n' fs/stat.c
+            awk '/error = cp_new_stat64\(&stat, statbuf\);/{line=$0; lnum=NR} {lines[NR]=$0} END {for(i=1;i<=NR;i++) {print lines[i]; if(i==lnum) {print "#ifdef CONFIG_KSU // for 32-bit"; print "\tksu_handle_fstat64_ret(&fd, &statbuf);"; print "#endif"}}}' fs/stat.c > fs/stat.c.tmp && mv fs/stat.c.tmp fs/stat.c
+        fi
 
-        if grep -q "ksu_handle_sys_newfstatat" "fs/stat.c"; then
+        if grep -q "ksu_init_rc_hook" "fs/stat.c"; then
             echo "[+] fs/stat.c Patched!"
-            echo "[+] Count: $(grep -c "ksu_handle_sys_newfstatat" "fs/stat.c")"
+            echo "[+] Count: $(grep -c "ksu_init_rc_hook" "fs/stat.c")"
         elif grep -q "ksu_handle_stat" "fs/stat.c"; then
             echo "[+] fs/stat.c Patched!"
             echo "[+] Count: $(grep -c "ksu_handle_stat" "fs/stat.c")"
