@@ -15,7 +15,7 @@ env:
   KERNEL_SOURCE : "https://github.com/LKGeek-Team/LKGeek_sdm660.git"
   KERNEL_BRANCH : "Sukisu"
 
-  CLANG_SOURCE : "https://github.com/llvm/llvm-project/releases/download/llvmorg-19.1.7/LLVM-19.1.7-Linux-X64.tar.xz"
+  CLANG_SOURCE : "https://github.com/llvm/llvm-project/releases/download/llvmorg-21.1.0/LLVM-21.1.0-Linux-X64.tar.xz"
   CLANG_BRANCH : ""
 
   GCC_GNU : false
