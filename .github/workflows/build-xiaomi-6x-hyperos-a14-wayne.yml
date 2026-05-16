@@ -12,8 +12,8 @@ env:
   CUSTOM_CMDS : "CLANG_TRIPLE=aarch64-linux-gnu-"
   EXTRA_CMDS : "LD=ld.lld"
 
-  KERNEL_SOURCE : "https://github.com/LKDenchin/scarlet_sdm660.git"
-  KERNEL_BRANCH : "sched-test"
+  KERNEL_SOURCE : "https://github.com/LKGeek-Team/LKGeek_sdm660.git"
+  KERNEL_BRANCH : "Sukisu"
 
   CLANG_SOURCE : "https://github.com/llvm/llvm-project/releases/download/llvmorg-19.1.7/LLVM-19.1.7-Linux-X64.tar.xz"
   CLANG_BRANCH : ""
@@ -32,8 +32,8 @@ env:
   KERNELSU_SOURCE : "https://raw.githubusercontent.com/rsuntk/KernelSU/main/kernel/setup.sh"
   KERNELSU_BRANCH : "main"
 
-  KERNELSU_AUTO_GET : "false" # if u want easy setting kernelsu, u can true.
-  KERNELSU_AUTO_FORK : "next" # xxksu, rsuntk, next, resukisu and sukisu
+  KERNELSU_AUTO_GET : "true" # if u want easy setting kernelsu, u can true.
+  KERNELSU_AUTO_FORK : "resukisu" # xxksu, rsuntk, next, resukisu and sukisu
 
   SUSFS_ENABLE : false
   SUSFS_FIXED : false
