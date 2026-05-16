@@ -32,7 +32,7 @@ env:
   KERNELSU_SOURCE : "https://raw.githubusercontent.com/rsuntk/KernelSU/main/kernel/setup.sh"
   KERNELSU_BRANCH : "v3.0.0-30-legacy"
 
-  KERNELSU_AUTO_GET : "false" # if u want easy setting kernelsu, u can true.
+  KERNELSU_AUTO_GET : "true" # if u want easy setting kernelsu, u can true.
   KERNELSU_AUTO_FORK : "rsuntk" # xxksu, rsuntk, next, resukisu and sukisu
 
   SUSFS_ENABLE : false
@@ -52,6 +52,7 @@ env:
   PYTHON_VERSION: "3" # Only 2(Ubuntu 22.04 and Ubuntu 20.04) or 3(Any OS Versions).
 
   PACK_METHOD: "Anykernel3" # Anykernel3 need SOURCE and BRANCH, MKBOOTIMG needn't it.
+  PACK_KMODULES: "false" # if u want pack kernel modules (.ko) into Anykernel3.
 
   KERNELSU_METHOD: "shell" # shell, manual and only.
 
@@ -59,14 +60,14 @@ env:
   PATCHES_BRANCH: "" # [your_branch] -> main
 
   SUSFS_FOLDER_FIXED: "" # Fill in your patch prefix directory here. Leave it blank if there isn't one. -> your_folder
-  SUSFS_155_FIXED: "" # Fill in your patches here. If there are multiple patches, please separate them with a comma. Leave it blank if there isn't one. -> patch1,patch2 (Only v1.5.5 SuSFS)
-  SUSFS_151X_FIXED: "" # Fill in your patches here. If there are multiple patches, please separate them with a comma. Leave it blank if there isn't one. -> patch1,patch2 (Only v1.5.1X SuSFS)
-  SUSFS_LATEST_FIXED: "" # Fill in your patches here. If there are multiple patches, please separate them with a comma. Leave it blank if there isn't one. -> patch1,patch2
+  SUSFS_PATCH_FIXED: "" # Fill in your patches here. If there are multiple patches, please separate them with a comma. Leave it blank if there isn't one. -> patch1,patch2
 
   REKERNEL_ENABLE: "false" # if u need Re:Kernel.
 
   HOOK_METHOD: "syscall" # manual hook method,can choice : normal, syscall and tracepoint.
-  HOOK_OLDER: "false" # contain backport older patch and syscall older patch.
+  
+  KERNEL_PATCH: "false" # If your kernel version is <= 4.9, you have the option of enabling the patch to patch the kernel_write and kernel_read functions.
+  
 
   KPM_ENABLE: "false" # Anyone devices.
   KPM_INLINE: "false" # Only use it for SukiSU-Ultra.
